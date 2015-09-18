@@ -8,6 +8,13 @@ describe("Pizza", function() {
         expect(testPizza.price).to.equal(10.99);
         expect(testPizza.toppings).to.eql([pepperoni, onion, green_pepper]);
     });
+
+    it("tests to make sure that you can add a topping to a pizza", function(){
+        var testPizza = new Pizza("large", 10.99, []);
+        var testTopping = new Topping("onion", .50);
+        testPizza.addTopping(testTopping)
+        expect(testTopping).to.equal(testPizza.toppings[0]);
+    });
 });
 
 describe("Topping", function() {

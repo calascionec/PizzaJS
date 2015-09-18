@@ -14,7 +14,22 @@ Pizza.prototype.addTopping = function() {
     for (var i = 0; i <args.length; i++){
         this.toppings.push(args[i]);
     }
-};
+}
+
+Pizza.prototype.printOutToppings = function() {
+    
+    var string = "<li>";
+    if (this.toppings.length === 0) {
+        string += "No Toppings";
+    } else {
+        for(i = 0; i < this.toppings.length - 1; i++ ){
+            string += this.toppings[i].name + ", " ;
+        }
+    }
+    string+= this.toppings[(this.toppings.length) - 1].name;
+    string += "</li>";
+    return string;
+}
 
 Pizza.prototype.getPrice = function() {
     var price = 0;
@@ -28,7 +43,7 @@ Pizza.prototype.getPrice = function() {
     for( var i = 0; i < this.toppings.length; i++) {
         price += parseFloat((this.toppings[i].price));
     }
-    return price;
+    return (price * this.number);
 }
 var sizeForm ="<select id= 'pizza-size' >"+
                         "<option value='Small'>" + "Small" + "</option>"+
@@ -36,18 +51,15 @@ var sizeForm ="<select id= 'pizza-size' >"+
                         "<option value='Large'>"+"Large"+"</option>"+
                         "</select>" +
                         "<label>"+"Number Of Pizzas"+
-                        "<input type='number' id='quantity' min='1'></input>" +
+                        "<input type='number' id='quantity' value ='1' min='1'></input>" +
                         "<button id='pizza'>"+"Next"+"</button>";
 
-var toppingsCheckList = "<input type='checkbox' name='topping' value='.50'>" +
-                        "<label>"+"Pepperoni" +"</label>" +
-                        "<input type='checkbox' name='topping' value='.50'>" +
-                        "<label>"+"Onion" +"</label>" +
-                        "<input type='checkbox' name='topping' value='.50'>" +
-                        "<label>"+"Green Pepper" +"</label>" +
-                        "<input type='checkbox' name='topping' value='.50'>" +
-                        "<label>"+"Bacon" +"</label>" +
-                        "<button id='toppings'>"+"Next"+"</button>";
+var toppingsCheckList = "<select id = 'toppings'>" +
+                        "<option value='.50'>" + "Pepperoni" + "</option>"+
+                        "<option value='.50'>"+"Onion"+"</option>"+
+                        "<option value='.50'>"+"Mushrooms"+"</option>"+
+                        "</select>" + "<button id='add-topping'>" + "Add" + "</button>"+
+                        "<button id='done'>"+"Next"+"</button>";
 
 
 var size;
@@ -67,23 +79,23 @@ $(document).ready(function() {
             $(".form-area").empty();
             $(".form-area").append(toppingsCheckList);
 
-            $("button#toppings").click(function(){
-                $("input[type='checkbox']:checked").each(function() {
-                    chosenToppings.push([$(this).next("label").text(), $(this).val()]);
-                    for(i = 0; i < chosenToppings.length; i++) {
-                        var topping = new Topping(chosenToppings[i][0], chosenToppings[i][1]);
-                        newPizza.addTopping(topping);
-                    }
-                });
+            $("button#add-topping").click(function(){
+                var toppingName = $("#toppings option:selected").text();
+                var toppingPrice = $("#toppings option:selected").val();
+                var topping = new Topping(toppingName, toppingPrice);
+                newPizza.addTopping(topping);
+            });
+            $("button#done").click(function(){
                 $(".form-area").empty();
                 $("h1").text("Review your Order");
                 $(".form-area").append("<h2> You ordered </h2>" +
                                         "<ul><li>" + newPizza.size + "</li>" +
-                                        "<li>" + newPizza.toppings[0].name+"</li>"+
+                                        newPizza.printOutToppings() +"</li>"+
                                         "<li>" + newPizza.getPrice() + "</li>" +
                                         "</ul>" +"<button id = 'start-over'>" +"Start Over"+"</button>");
-                    $("button#start-over").click(function(){location.reload();});
+                $("button#start-over").click(function(){location.reload();});
             });
+
         });
     });
 

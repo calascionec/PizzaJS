@@ -1,21 +1,3 @@
-$(document).ready(function() {
-    $("button#start-order").on("click", function(){
-        $("button#start-order").hide();
-        $(".form-area").append("<form id='select-size'>"+
-                                "<select class=''>"+
-                                "<option value='1'>" + "Small" + "</option>"+
-                                "<option value='2'>"+"Medium"+"</option>"+
-                                "<option value='3'>"+"Large"+"</option>"+
-                                "</select>" +"<button type='submit'>"+"Next"+"</button>"+
-                               "</form>")
-    });
-
-    $("form#select-size").submit(function(event){
-        event.preventDefault();
-    });
-
-});
-
 function Pizza(size, toppings) {
     this.size = size;
     this.toppings = toppings;
@@ -29,7 +11,7 @@ function Topping(name, price) {
 Pizza.prototype.addTopping = function() {
     var args = Array.prototype.slice.call(arguments);
     for (var i = 0; i <args.length; i++){
-        this.toppings.push(args[i]);    
+        this.toppings.push(args[i]);
     }
 };
 
@@ -47,3 +29,25 @@ Pizza.prototype.getPrice = function() {
     }
     return price;
 }
+var sizeForm =           "<select id= 'pizza-size' >"+
+                        "<option value='Small'>" + "Small" + "</option>"+
+                        "<option value='Medium'>"+"Medium"+"</option>"+
+                        "<option value='Large'>"+"Large"+"</option>"+
+                        "</select>" +"<button id='pizza'>"+"Next"+"</button>";
+var size;
+var newPizza;
+$(document).ready(function() {
+
+    $("button#start-order").click(function(){
+        $("button#start-order").hide();
+        $(".form-area").append(sizeForm);
+
+        $("button#pizza").click(function(){
+            size = $("#pizza-size option:selected").text();
+            newPizza = new Pizza(size, []);
+
+        });
+    });
+
+
+});

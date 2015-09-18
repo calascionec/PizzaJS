@@ -17,7 +17,7 @@ Pizza.prototype.addTopping = function() {
 }
 
 Pizza.prototype.printOutToppings = function() {
-    
+
     var string = "<li>";
     if (this.toppings.length === 0) {
         string += "No Toppings";
@@ -25,8 +25,9 @@ Pizza.prototype.printOutToppings = function() {
         for(i = 0; i < this.toppings.length - 1; i++ ){
             string += this.toppings[i].name + ", " ;
         }
+        string+= this.toppings[(this.toppings.length) - 1].name;
     }
-    string+= this.toppings[(this.toppings.length) - 1].name;
+
     string += "</li>";
     return string;
 }
@@ -52,14 +53,17 @@ var sizeForm ="<select id= 'pizza-size' >"+
                         "</select>" +
                         "<label>"+"Number Of Pizzas"+
                         "<input type='number' id='quantity' value ='1' min='1'></input>" +
-                        "<button id='pizza'>"+"Next"+"</button>";
+                        "<button id='pizza' class='btn btn-success'>"+"Next"+"</button>";
 
-var toppingsCheckList = "<select id = 'toppings'>" +
+var toppingsCheckList = "<div class='row'>"+
+                        "<div class ='col-md-6'>"+
+                        "<select id = 'toppings'>" +
                         "<option value='.50'>" + "Pepperoni" + "</option>"+
                         "<option value='.50'>"+"Onion"+"</option>"+
                         "<option value='.50'>"+"Mushrooms"+"</option>"+
-                        "</select>" + "<button id='add-topping'>" + "Add" + "</button>"+
-                        "<button id='done'>"+"Next"+"</button>";
+                        "</select>" + "<button id='add-topping' class='btn btn-danger'>" + "Add" + "</button>"+
+                        "<button id='done' class='btn btn-success'>"+"Next"+"</button>" +
+                        "</div>" + "<div class='col-md-6 toppings'><h1>Toppings Added</h1></div></div>";
 
 
 var size;
@@ -84,6 +88,7 @@ $(document).ready(function() {
                 var toppingPrice = $("#toppings option:selected").val();
                 var topping = new Topping(toppingName, toppingPrice);
                 newPizza.addTopping(topping);
+                $(".toppings").append("<p>" + topping.name + "</p>");
             });
             $("button#done").click(function(){
                 $(".form-area").empty();
@@ -91,7 +96,7 @@ $(document).ready(function() {
                 $(".form-area").append("<h2> You ordered </h2>" +
                                         "<ul><li>" + newPizza.size + "</li>" +
                                         newPizza.printOutToppings() +"</li>"+
-                                        "<li>" + newPizza.getPrice() + "</li>" +
+                                        "<li>" + "$" + newPizza.getPrice() + "</li>" +
                                         "</ul>" +"<button id = 'start-over'>" +"Start Over"+"</button>");
                 $("button#start-over").click(function(){location.reload();});
             });

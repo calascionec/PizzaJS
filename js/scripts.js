@@ -69,7 +69,6 @@ var toppingsCheckList = "<div class='row'>"+
 var size;
 var number;
 var newPizza;
-var chosenToppings = [];
 $(document).ready(function() {
 
     $("button#start-order").click(function(){
